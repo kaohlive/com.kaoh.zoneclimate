@@ -1,0 +1,19 @@
+{
+  "name": {
+    "en": "Zone climate"
+  },
+  "height": 188,
+  "settings": [{
+    "id": "zone",
+    "type": "autocomplete",
+    "title": {
+      "en": "Zone"
+    }
+  }],
+  "api": {
+    "getZoneClimate": {
+      "method": "GET",
+      "path": "/devices"
+    }
+  }
+}

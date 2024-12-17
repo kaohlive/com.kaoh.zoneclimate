@@ -1,0 +1,56 @@
+{
+  "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
+  "id": "com.kaoh.zoneclimate",
+  "version": "1.0.0",
+  "compatibility": ">=12.1.0",
+  "brandColor": "#9C5E32",
+  "sdk": 3,
+  "platforms": [
+    "local"
+  ],
+  "name": {
+    "en": "Zone climate"
+  },
+  "description": {
+    "en": "View the analysis of the climate in a specific zone by combining the measurements from multiple climate sensors"
+  },
+  "category": [
+    "climate"
+  ],
+  "permissions": [
+    "homey:manager:api"
+  ],
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "author": {
+    "name": "Vincent Boer",
+    "email": "vincent@vdboer.nl"
+  },
+  "widgets": {
+    "zone-climate": {
+      "name": {
+        "en": "Zone climate"
+      },
+      "height": 188,
+      "settings": [
+        {
+          "id": "zone",
+          "type": "autocomplete",
+          "title": {
+            "en": "Zone"
+          }
+        }
+      ],
+      "api": {
+        "getZoneClimate": {
+          "method": "GET",
+          "path": "/devices"
+        }
+      },
+      "id": "zone-climate"
+    }
+  }
+}
