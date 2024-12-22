@@ -4,5 +4,8 @@
   },
   "1.0.1": {
     "en": "App details updated"
+  },
+  "1.1.0": {
+    "en": "Added support for nested zones (childs)"
   }
 }
