@@ -155,7 +155,7 @@
         // View the settings the user provided if your widget has settings.
         console.log('Widget settings:', Homey.getSettings());
         Homey.ready();
-        const { zone } = Homey.getSettings();
+        const { zone, includeChild } = Homey.getSettings();
         if (!zone) {
           showError('Please select your Zone from the widget\'s settings.');
           return;
@@ -163,7 +163,7 @@
         //document.getElementById('zone-name').innerText = zone.name;
 
         // Fetch something from your app.
-        Homey.api('GET', `/devices?zoneid=${zone.id}`)
+        Homey.api('GET', `/devices?zoneid=${zone.id}&includeChild=${includeChild}`)
           .then((result) => {
             climateStatus=result;
           })

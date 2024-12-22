@@ -9,6 +9,13 @@
     "title": {
       "en": "Zone"
     }
+  },
+  {
+    "id": "includeChild",
+    "type": "checkbox",
+    "title": {
+      "en": "Include nested/child zones"
+    }
   }],
   "api": {
     "getZoneClimate": {
