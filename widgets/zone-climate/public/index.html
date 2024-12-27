@@ -161,7 +161,15 @@
           return;
         }
         //document.getElementById('zone-name').innerText = zone.name;
+        updateStatus();
+        setInterval(updateStatus, 60000);
+      }
 
+      function updateStatus() {
+        const { zone, includeChild } = Homey.getSettings();
+        if (!zone) {
+          return;
+        }
         // Fetch something from your app.
         Homey.api('GET', `/devices?zoneid=${zone.id}&includeChild=${includeChild}`)
           .then((result) => {
@@ -173,8 +181,7 @@
           })
           .finally(() => {
             renderStatus();
-            setInterval(renderStatus, 10000);
-          }); 
+          });         
       }
 
       function renderStatus() {
@@ -224,12 +231,16 @@
         if(climateStatus.measure_iaq.available)
         {
           document.getElementById('measure-iaq').innerText=climateStatus.measure_iaq.average.toFixed(0);
-          if(climateStatus.measure_iaq.average < 150)
+          if(climateStatus.measure_iaq.average < 50)
+            document.getElementById('climate-qual').innerHTML='great';
+          else if(climateStatus.measure_iaq.average < 100)
             document.getElementById('climate-qual').innerHTML='good';
+          else if(climateStatus.measure_iaq.average < 150)
+            document.getElementById('climate-qual').innerHTML='fair';
           else if(climateStatus.measure_iaq.average < 250)
-            document.getElementById('climate-qual').innerHTML='moderate';
-          else
             document.getElementById('climate-qual').innerHTML='poor';
+          else
+            document.getElementById('climate-qual').innerHTML='bad';
         } else {
           document.getElementById('measure-iaq').innerText='-';
         }

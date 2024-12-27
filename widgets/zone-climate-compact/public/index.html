@@ -1,0 +1,198 @@
+<html>
+  <head>
+    <style>
+      /* Example of a custom CSS class. */
+      .wrapper { 
+        display: flex; 
+        position: absolute; top: 0px; left: 0px;
+        width: 48%; height: 100%;
+        margin: 0px; padding: 0px;
+        background-color: var(--homey-background-color);
+        border-radius: 5%; 
+      }
+      .zone2 { 
+        left: 51%;
+        background-color: var(--homey-background-color);
+      }
+      .climate-wrapper { 
+        top: 30px; left: 15px;
+        display: flex; position: relative;
+        width: 75px; height: 120px; 
+        justify-content: left; align-items: center;
+        margin-left: 40px; margin-right: 50px;
+      }
+      .circular-climate { 
+        width: 75px; height: 75px; 
+        border-radius: 50%;
+        border: 1px solid #CDCDCD; 
+        background: radial-gradient(circle, #FFFFFF 0%, rgba(255, 255, 255, 0.8) 20%, rgba(10, 10, 10, 0.4) 100%); 
+        display: flex; 
+        position: relative; 
+      }
+      .climate-slider { 
+        width: 23px; height: 23px; 
+        border-radius: 50%; 
+        background-color: #e3e3e3;
+        border: 1px solid #525252;
+        box-shadow: 0 0 8px 2px #C7C7C7;  
+        position: absolute; /* Position absolutely within the gradient circle */ 
+        transform: translate(-50%, -50%); /* Offset for perfect centering */
+        transition: top 0.5s ease, left 0.5s ease;
+      }
+      .climate-label { 
+        position: absolute;
+        font-size: 10px; font-weight: 100; text-align: center;
+      }
+      .climate-value {     
+        position: absolute; 
+        font-size: var(--homey-font-size-small); font-weight: var(--homey-font-weight-bold); padding-top: 30px; 
+      }
+      .label-hot { top: 5px; left: 50%; width: 65px; transform: translateX(-50%); } 
+      .label-dry { top: 50%; left: 80px; transform: translateY(-50%); } 
+      .label-cold { bottom: 5px; left: 50%; transform: translateX(-50%); } 
+      .label-humid { top: 50%; left: -35px; transform: translateY(-50%); }
+      .label-temp { top: 85%; left: 15px; transform: translateY(-50%); width: 70px; text-align: center; }
+      .label-hum { top: 85%; left: 100px; transform: translateY(-50%); width: 70px; text-align: center; }
+      .label-comfort { top: 16px; left: 5px; transform: translateY(-50%); width: 70px; text-align: right; font-size: 16px; font-weight: 100;}
+      .comfort-value {     
+        position: absolute; width: 120px; left: 80px;
+        font-size: var(--homey-font-size-small); font-weight: var(--homey-font-weight-bold); text-align: left;
+      }  
+    </style>
+  </head>
+
+  <body class="homey-widget">
+    <div class="wrapper">
+      <div class="climate-label label-comfort">climate:</div>
+      <div id="climate-comfort-zone1" class="label-comfort comfort-value"></div>
+      <div class="climate-wrapper">
+        <div class="circular-climate">
+          <div id="climate-slider-zone1" class="climate-slider" style="top: 50%; left: 50%;"></div>
+        </div>
+        <div class="climate-label label-hot">too warm</div> 
+        <div class="climate-label label-dry">dry</div> 
+        <div class="climate-label label-cold">cold</div> 
+        <div class="climate-label label-humid">humid</div>
+      </div>
+      <div class="climate-label label-temp">temperature</div>
+      <div id="measure-temp-zone1" class="climate-value label-temp"></div>
+      <div class="climate-label label-hum">humidity</div>
+      <div id="measure-hum-zone1" class="climate-value label-hum"></div>
+    </div>
+    <div class="wrapper zone2">
+      <div class="climate-label label-comfort">climate:</div>
+      <div id="climate-comfort-zone2" class="label-comfort comfort-value"></div>
+      <div class="climate-wrapper">
+        <div class="circular-climate">
+          <div id="climate-slider-zone2" class="climate-slider" style="top: 50%; left: 50%;"></div>
+        </div>
+        <div class="climate-label label-hot">too warm</div> 
+        <div class="climate-label label-dry">dry</div> 
+        <div class="climate-label label-cold">cold</div> 
+        <div class="climate-label label-humid">humid</div>
+      </div>
+      <div class="climate-label label-temp">temperature</div>
+      <div id="measure-temp-zone2" class="climate-value label-temp"></div>
+      <div class="climate-label label-hum">humidity</div>
+      <div id="measure-hum-zone2" class="climate-value label-hum"></div>
+    </div>
+    <script type="text/javascript">
+      function onHomeyReady(Homey) {
+        // View the settings the user provided if your widget has settings.
+        console.log('Widget settings:', Homey.getSettings());
+        Homey.ready();
+        const { zone, zone2, includeChild } = Homey.getSettings();
+        if (!zone) {
+          showError('Please select your left zone from the widget\'s settings.');
+          return;
+        }
+        if (!zone2) {
+          showError('Please select your right zone from the widget\'s settings.');
+          return;
+        }
+        renderStatus();
+        setInterval(renderStatus, 60000);
+      }
+
+      function renderStatus(){
+        let climateStatusZone1; let climateStatusZone2;
+        const { zone, zone2, includeChild } = Homey.getSettings();
+        if (!zone) {
+          return;
+        }
+        Homey.api('GET', `/devices?zoneid=${zone.id}&includeChild=${includeChild}`)
+          .then((result) => {
+            climateStatusZone1=result;
+          })
+          .catch(err => {
+            showError(`Please select your Zone from the widget's settings.`);
+            return;
+          })
+          .finally(() => {
+            renderStatusPerZone(climateStatusZone1, 'zone1');
+          });
+        if (!zone2) {
+          return;
+        }
+        Homey.api('GET', `/devices?zoneid=${zone2.id}&includeChild=${includeChild}`)
+          .then((result) => {
+            climateStatusZone2=result;
+          })
+          .catch(err => {
+            showError(`Please select your Zone from the widget's settings.`);
+            return;
+          })
+          .finally(() => {
+            renderStatusPerZone(climateStatusZone2, 'zone2');
+          });   
+      }
+
+      function renderStatusPerZone(climateStatus, zone) {
+        document.getElementById('climate-comfort-'+zone).innerText='';
+        document.getElementById('climate-comfort-'+zone).innerText='';
+        if(climateStatus.measure_temperature.available)
+        {
+          let top=50;
+          if (climateStatus.measure_temperature.average >= 50) { top=100; } else { 
+            top=(climateStatus.measure_temperature.average / 20) * 50; }
+          document.getElementById('climate-slider-'+zone).style.top=(100-top)+'%';
+          document.getElementById('measure-temp-'+zone).innerText=climateStatus.measure_temperature.average.toFixed(1)+'°C';
+          if(climateStatus.measure_temperature.average < 10)
+            document.getElementById('climate-comfort-'+zone).innerHTML+='very cold&nbsp;';
+          else if(climateStatus.measure_temperature.average < 15)
+            document.getElementById('climate-comfort-'+zone).innerHTML+='cold&nbsp;';
+          else if(climateStatus.measure_temperature.average < 18.5)
+            document.getElementById('climate-comfort-'+zone).innerHTML+='chilly&nbsp;';
+          else if(climateStatus.measure_temperature.average < 22)
+            document.getElementById('climate-comfort-'+zone).innerHTML+='';
+          else if(climateStatus.measure_temperature.average < 28)
+            document.getElementById('climate-comfort-'+zone).innerHTML+='warm&nbsp;';
+          else
+            document.getElementById('climate-comfort-'+zone).innerHTML+='hot&nbsp;';
+        } else {
+          document.getElementById('climate-slider-'+zone).style.top='50%';
+          document.getElementById('measure-temp-'+zone).innerText='-';
+        }
+        if(climateStatus.measure_humidity.available)
+        {
+          let left=50;
+          if (climateStatus.measure_humidity.average >= 90) { left=100; } else { 
+            left=(climateStatus.measure_humidity.average / 50) * 50; }
+          document.getElementById('climate-slider-'+zone).style.left=(100-left)+'%'
+          document.getElementById('measure-hum-'+zone).innerText=climateStatus.measure_humidity.average.toFixed(0)+'%';
+          if(climateStatus.measure_humidity.average < 30)
+            document.getElementById('climate-comfort-'+zone).innerHTML+='dry';
+          else if(climateStatus.measure_humidity.average < 65)
+            document.getElementById('climate-comfort-'+zone).innerHTML+='';
+          else if(climateStatus.measure_humidity.average < 80)
+            document.getElementById('climate-comfort-'+zone).innerHTML+='humid';
+          else
+            document.getElementById('climate-comfort-'+zone).innerHTML+='wet';
+        } else {
+          document.getElementById('climate-slider-'+zone).style.left='50%';
+          document.getElementById('measure-hum-'+zone).innerText='-';
+        }        
+      }
+    </script>
+  </body>
+</html>

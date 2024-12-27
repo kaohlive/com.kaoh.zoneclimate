@@ -29,9 +29,43 @@ module.exports = class ZoneClimate extends Homey.App {
 				  }))
 				  .filter(zone => zone.name.toLowerCase().includes(query.toLowerCase()));
 			  });
-		  } catch (err) {
+		} catch (err) {
 			this.log(`Climaste zones might not be available: ${err.message}`);
-		  }
+		}
+    try {
+      this.homey.dashboards.getWidget('zone-climate-compact')
+      .registerSettingAutocompleteListener('zone', async (query, settings) => {
+        this.log("List zones for widget settings");
+        this.homeyAPI = HomeyAPI.forCurrentHomey(this.homey); // Refresh
+        this.homeyAPI.then(x => this.homeyAPI = x);
+        await this.homeyAPI;
+        let myZones = Object.values(await this.homeyAPI.zones.getZones());
+        this.homey.app.log('Zone count: '+myZones.length);
+        this.homey.app.log(JSON.stringify(myZones));
+        return Object.values(myZones)
+          .map(zone => ({
+          name: zone.name,
+          id: zone.id,
+          }))
+        .filter(zone => zone.name.toLowerCase().includes(query.toLowerCase()));
+      })
+      .registerSettingAutocompleteListener('zone2', async (query, settings) => {
+        this.log("List zones for widget settings");
+        this.homeyAPI = HomeyAPI.forCurrentHomey(this.homey); // Refresh
+        this.homeyAPI.then(x => this.homeyAPI = x);
+        await this.homeyAPI;
+        let myZones = Object.values(await this.homeyAPI.zones.getZones());
+        this.homey.app.log('Zone count: '+myZones.length);
+        this.homey.app.log(JSON.stringify(myZones));
+        return Object.values(myZones)
+          .map(zone => ({
+          name: zone.name,
+          id: zone.id,
+          }))
+        .filter(zone => zone.name.toLowerCase().includes(query.toLowerCase()));
+      });
+    } catch (err) {
+      this.log(`Climaste zones might not be available: ${err.message}`);
+    }
   }
-
 };

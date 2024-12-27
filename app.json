@@ -60,6 +60,43 @@
         }
       },
       "id": "zone-climate"
+    },
+    "zone-climate-compact": {
+      "name": {
+        "en": "Zone climate - compact"
+      },
+      "transparent": true,
+      "height": 188,
+      "settings": [
+        {
+          "id": "zone",
+          "type": "autocomplete",
+          "title": {
+            "en": "Left zone"
+          }
+        },
+        {
+          "id": "zone2",
+          "type": "autocomplete",
+          "title": {
+            "en": "Right zone"
+          }
+        },
+        {
+          "id": "includeChild",
+          "type": "checkbox",
+          "title": {
+            "en": "Include nested/child zones"
+          }
+        }
+      ],
+      "api": {
+        "getZoneClimate": {
+          "method": "GET",
+          "path": "/devices"
+        }
+      },
+      "id": "zone-climate-compact"
     }
   }
 }
