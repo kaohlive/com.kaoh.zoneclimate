@@ -184,24 +184,37 @@
           });         
       }
 
+      function convertTemp(value, unit) {
+          if (unit === 'F') {
+              return (value - 32) * 5 / 9;
+          } else if (unit === 'C') {
+              return (value * 9 / 5) + 32;
+          } else {
+              throw new Error('Invalid unit provided');
+          }
+      }
+
       function renderStatus() {
         document.getElementById('climate-comfort').innerText='';
         if(climateStatus.measure_temperature.available)
         {
+          let tempAvarageInCelcius = climateStatus.measure_temperature.average;
+          if(climateStatus.measure_temperature.units==='F')
+            tempAvarageInCelcius = convertTemp(tempAvarageInCelcius, 'F');
           let top=50;
-          if (climateStatus.measure_temperature.average >= 50) { top=100; } else { 
-            top=(climateStatus.measure_temperature.average / 20) * 50; }
+          if (tempAvarageInCelcius >= 50) { top=100; } else { 
+            top=(tempAvarageInCelcius / 20) * 50; }
           document.getElementById('climate-slider').style.top=(100-top)+'%';
-          document.getElementById('measure-temp').innerText=climateStatus.measure_temperature.average.toFixed(1)+'°C';
-          if(climateStatus.measure_temperature.average < 10)
+          document.getElementById('measure-temp').innerText=climateStatus.measure_temperature.average.toFixed(1)+climateStatus.measure_temperature.units;
+          if(tempAvarageInCelcius < 10)
             document.getElementById('climate-comfort').innerHTML+='very cold&nbsp;';
-          else if(climateStatus.measure_temperature.average < 15)
+          else if(tempAvarageInCelcius < 15)
             document.getElementById('climate-comfort').innerHTML+='cold&nbsp;';
-          else if(climateStatus.measure_temperature.average < 18.5)
+          else if(tempAvarageInCelcius < 18.5)
             document.getElementById('climate-comfort').innerHTML+='chilly&nbsp;';
-          else if(climateStatus.measure_temperature.average < 22)
+          else if(tempAvarageInCelcius < 22)
             document.getElementById('climate-comfort').innerHTML+='';
-          else if(climateStatus.measure_temperature.average < 28)
+          else if(tempAvarageInCelcius < 28)
             document.getElementById('climate-comfort').innerHTML+='warm&nbsp;';
           else
             document.getElementById('climate-comfort').innerHTML+='hot&nbsp;';
@@ -215,7 +228,7 @@
           if (climateStatus.measure_humidity.average >= 90) { left=100; } else { 
             left=(climateStatus.measure_humidity.average / 50) * 50; }
           document.getElementById('climate-slider').style.left=(100-left)+'%'
-          document.getElementById('measure-hum').innerText=climateStatus.measure_humidity.average.toFixed(0)+'%';
+          document.getElementById('measure-hum').innerText=climateStatus.measure_humidity.average.toFixed(0)+climateStatus.measure_humidity.units;
           if(climateStatus.measure_humidity.average < 30)
             document.getElementById('climate-comfort').innerHTML+='dry';
           else if(climateStatus.measure_humidity.average < 65)

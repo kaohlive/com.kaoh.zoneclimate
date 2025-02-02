@@ -4,16 +4,19 @@ const { HomeyAPI } = require('athom-api');
 
 function createmeasurements(measurementid, devices)
 {
-  let measurementDevices = devices.filter(device => device.capabilities.some(cap => cap.id === measurementid) ); 
+  let measurementDevices = devices.filter(device => device.capabilities.some(cap => cap.id === measurementid) );
+  let measurementUnit = null;
   if (measurementDevices.length > 0) { 
     let totalMeasurement = measurementDevices.reduce((sum, device) => { 
-      let measurement = device.capabilities.find(cap => cap.id === measurementid); 
+      let measurement = device.capabilities.find(cap => cap.id === measurementid);
+      console.log(JSON.stringify(measurement));
+      measurementUnit=measurement.units;
       return sum + (measurement.value || 0);
     }, 0); 
     let averageMeasurement = totalMeasurement / measurementDevices.length;
-    return { available: true, average: averageMeasurement }; 
+    return { available: true, average: averageMeasurement, units: measurementUnit}; 
   } else { 
-    return { available: false, average: 0 }; 
+    return { available: false, average: 0, units: measurementUnit }; 
   } 
 }
 
