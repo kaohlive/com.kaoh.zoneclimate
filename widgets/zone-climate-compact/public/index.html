@@ -147,10 +147,10 @@
           });   
       }
 
-            function convertTemp(value, unit) {
-          if (unit === 'F') {
+      function convertTemp(value, unit) {
+          if (unit.endsWith('F')) {
               return (value - 32) * 5 / 9;
-          } else if (unit === 'C') {
+          } else if (unit.endsWith('C')) {
               return (value * 9 / 5) + 32;
           } else {
               throw new Error('Invalid unit provided');
