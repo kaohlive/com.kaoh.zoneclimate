@@ -2,7 +2,7 @@
   "id": "com.kaoh.zoneclimate",
   "homeyCommunityTopicId": 124443,
   "source": "https://github.com/kaohlive/com.kaoh.zoneclimate",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "compatibility": ">=12.1.0",
   "brandColor": "#9C5E32",
   "sdk": 3,
