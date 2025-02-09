@@ -149,8 +149,10 @@
 
       function convertTemp(value, unit) {
           if (unit.endsWith('F')) {
+            //alert(unit+' is Fahren')
               return (value - 32) * 5 / 9;
           } else if (unit.endsWith('C')) {
+            //alert(unit+' is Cels')
               return (value * 9 / 5) + 32;
           } else {
               throw new Error('Invalid unit provided');
@@ -164,7 +166,7 @@
         {
           let top=50;
           let tempAvarageInCelcius = climateStatus.measure_temperature.average;
-          if(climateStatus.measure_temperature.units==='F')
+          if(climateStatus.measure_temperature.units.endsWith('F'))
             tempAvarageInCelcius = convertTemp(tempAvarageInCelcius, 'F');
           if (tempAvarageInCelcius >= 50) { top=100; } else { 
             top=(tempAvarageInCelcius / 20) * 50; }

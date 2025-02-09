@@ -199,7 +199,7 @@
         if(climateStatus.measure_temperature.available)
         {
           let tempAvarageInCelcius = climateStatus.measure_temperature.average;
-          if(climateStatus.measure_temperature.units==='F')
+          if(climateStatus.measure_temperature.units.endsWith('F'))
             tempAvarageInCelcius = convertTemp(tempAvarageInCelcius, 'F');
           let top=50;
           if (tempAvarageInCelcius >= 50) { top=100; } else { 
