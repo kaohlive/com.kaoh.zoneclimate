@@ -25,5 +25,8 @@
   },
   "1.4.1": {
     "en": "Improved memory use and fixed triggers"
+  },
+  "1.4.2": {
+    "en": "More triggers added"
   }
 }

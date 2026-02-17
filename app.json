@@ -3,7 +3,7 @@
   "id": "com.kaoh.zoneclimate",
   "homeyCommunityTopicId": 124443,
   "source": "https://github.com/kaohlive/com.kaoh.zoneclimate",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "compatibility": ">=12.1.0",
   "brandColor": "#9C5E32",
   "sdk": 3,
@@ -79,6 +79,138 @@
               "en": "IAQ value"
             },
             "example": 75
+          },
+          {
+            "name": "zone_name",
+            "type": "string",
+            "title": {
+              "en": "Zone name"
+            },
+            "example": "Living room"
+          }
+        ]
+      },
+      {
+        "id": "zone-co2-changed",
+        "title": {
+          "en": "Zone average CO2 changed"
+        },
+        "titleFormatted": {
+          "en": "The average CO2 in [[zone]] changed (nested: [[includeChild]])"
+        },
+        "hint": {
+          "en": "Triggers when the average CO2 level in a zone changes by more than 25 ppm."
+        },
+        "args": [
+          {
+            "type": "autocomplete",
+            "name": "zone",
+            "title": {
+              "en": "Zone"
+            },
+            "placeholder": {
+              "en": "Select a zone..."
+            }
+          },
+          {
+            "type": "checkbox",
+            "name": "includeChild",
+            "title": {
+              "en": "Include nested zones"
+            }
+          }
+        ],
+        "tokens": [
+          {
+            "name": "co2",
+            "type": "number",
+            "title": {
+              "en": "CO2 (ppm)"
+            },
+            "example": 650
+          },
+          {
+            "name": "zone_name",
+            "type": "string",
+            "title": {
+              "en": "Zone name"
+            },
+            "example": "Living room"
+          }
+        ]
+      },
+      {
+        "id": "zone-co2-crossed",
+        "title": {
+          "en": "Zone CO2 crossed threshold"
+        },
+        "titleFormatted": {
+          "en": "[[zone]] CO2 [[direction]] [[threshold]] ppm (nested: [[includeChild]])"
+        },
+        "hint": {
+          "en": "Triggers once when the average CO2 level crosses above or below a threshold."
+        },
+        "args": [
+          {
+            "type": "autocomplete",
+            "name": "zone",
+            "title": {
+              "en": "Zone"
+            },
+            "placeholder": {
+              "en": "Select a zone..."
+            }
+          },
+          {
+            "type": "dropdown",
+            "name": "direction",
+            "title": {
+              "en": "Direction"
+            },
+            "values": [
+              {
+                "id": "above",
+                "title": {
+                  "en": "Rises above"
+                }
+              },
+              {
+                "id": "below",
+                "title": {
+                  "en": "Drops below"
+                }
+              }
+            ]
+          },
+          {
+            "type": "number",
+            "name": "threshold",
+            "title": {
+              "en": "Threshold (ppm)"
+            },
+            "placeholder": {
+              "en": "800"
+            },
+            "min": 0,
+            "max": 5000,
+            "step": 50
+          },
+          {
+            "type": "checkbox",
+            "name": "includeChild",
+            "title": {
+              "en": "Include nested zones"
+            }
+          }
+        ],
+        "tokens": [
+          {
+            "name": "co2",
+            "type": "number",
+            "title": {
+              "en": "CO2 (ppm)"
+            },
+            "example": 650
           },
           {
             "name": "zone_name",
@@ -205,6 +337,89 @@
         ]
       },
       {
+        "id": "zone-humidity-crossed",
+        "title": {
+          "en": "Zone humidity crossed threshold"
+        },
+        "titleFormatted": {
+          "en": "[[zone]] humidity [[direction]] [[threshold]]% (nested: [[includeChild]])"
+        },
+        "hint": {
+          "en": "Triggers once when the average humidity crosses above or below a threshold."
+        },
+        "args": [
+          {
+            "type": "autocomplete",
+            "name": "zone",
+            "title": {
+              "en": "Zone"
+            },
+            "placeholder": {
+              "en": "Select a zone..."
+            }
+          },
+          {
+            "type": "dropdown",
+            "name": "direction",
+            "title": {
+              "en": "Direction"
+            },
+            "values": [
+              {
+                "id": "above",
+                "title": {
+                  "en": "Rises above"
+                }
+              },
+              {
+                "id": "below",
+                "title": {
+                  "en": "Drops below"
+                }
+              }
+            ]
+          },
+          {
+            "type": "number",
+            "name": "threshold",
+            "title": {
+              "en": "Threshold (%)"
+            },
+            "placeholder": {
+              "en": "60"
+            },
+            "min": 0,
+            "max": 100,
+            "step": 1
+          },
+          {
+            "type": "checkbox",
+            "name": "includeChild",
+            "title": {
+              "en": "Include nested zones"
+            }
+          }
+        ],
+        "tokens": [
+          {
+            "name": "humidity",
+            "type": "number",
+            "title": {
+              "en": "Humidity"
+            },
+            "example": 55
+          },
+          {
+            "name": "zone_name",
+            "type": "string",
+            "title": {
+              "en": "Zone name"
+            },
+            "example": "Living room"
+          }
+        ]
+      },
+      {
         "id": "zone-temperature-changed",
         "title": {
           "en": "Zone average temperature changed"
@@ -225,6 +440,89 @@
             "placeholder": {
               "en": "Select a zone..."
             }
+          },
+          {
+            "type": "checkbox",
+            "name": "includeChild",
+            "title": {
+              "en": "Include nested zones"
+            }
+          }
+        ],
+        "tokens": [
+          {
+            "name": "temperature",
+            "type": "number",
+            "title": {
+              "en": "Temperature"
+            },
+            "example": 21.5
+          },
+          {
+            "name": "zone_name",
+            "type": "string",
+            "title": {
+              "en": "Zone name"
+            },
+            "example": "Living room"
+          }
+        ]
+      },
+      {
+        "id": "zone-temperature-crossed",
+        "title": {
+          "en": "Zone temperature crossed threshold"
+        },
+        "titleFormatted": {
+          "en": "[[zone]] temperature [[direction]] [[threshold]] degrees (nested: [[includeChild]])"
+        },
+        "hint": {
+          "en": "Triggers once when the average temperature crosses above or below a threshold."
+        },
+        "args": [
+          {
+            "type": "autocomplete",
+            "name": "zone",
+            "title": {
+              "en": "Zone"
+            },
+            "placeholder": {
+              "en": "Select a zone..."
+            }
+          },
+          {
+            "type": "dropdown",
+            "name": "direction",
+            "title": {
+              "en": "Direction"
+            },
+            "values": [
+              {
+                "id": "above",
+                "title": {
+                  "en": "Rises above"
+                }
+              },
+              {
+                "id": "below",
+                "title": {
+                  "en": "Drops below"
+                }
+              }
+            ]
+          },
+          {
+            "type": "number",
+            "name": "threshold",
+            "title": {
+              "en": "Threshold (°C)"
+            },
+            "placeholder": {
+              "en": "21"
+            },
+            "min": -40,
+            "max": 80,
+            "step": 0.5
           },
           {
             "type": "checkbox",
