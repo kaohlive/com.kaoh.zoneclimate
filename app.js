@@ -62,6 +62,45 @@ module.exports = class ZoneClimate extends Homey.App {
       return args.zone.id === state.zone.id && Boolean(args.includeChild) === Boolean(state.includeChild);
     });
 
+    this._triggerCo2Changed = this.homey.flow.getTriggerCard('zone-co2-changed');
+    this._triggerCo2Changed.registerArgumentAutocompleteListener('zone', async (query) => {
+      return this.service.getZonesAutocomplete(query);
+    });
+    this._triggerCo2Changed.registerRunListener(async (args, state) => {
+      return args.zone.id === state.zone.id && Boolean(args.includeChild) === Boolean(state.includeChild);
+    });
+
+    // --- Threshold-crossing trigger cards ---
+    this._triggerTempCrossed = this.homey.flow.getTriggerCard('zone-temperature-crossed');
+    this._triggerTempCrossed.registerArgumentAutocompleteListener('zone', async (query) => {
+      return this.service.getZonesAutocomplete(query);
+    });
+    this._triggerTempCrossed.registerRunListener(async (args, state) => {
+      if (args.zone.id !== state.zone.id || Boolean(args.includeChild) !== Boolean(state.includeChild)) return false;
+      if (args.direction === 'above') return state.previous <= args.threshold && state.current > args.threshold;
+      return state.previous >= args.threshold && state.current < args.threshold;
+    });
+
+    this._triggerHumCrossed = this.homey.flow.getTriggerCard('zone-humidity-crossed');
+    this._triggerHumCrossed.registerArgumentAutocompleteListener('zone', async (query) => {
+      return this.service.getZonesAutocomplete(query);
+    });
+    this._triggerHumCrossed.registerRunListener(async (args, state) => {
+      if (args.zone.id !== state.zone.id || Boolean(args.includeChild) !== Boolean(state.includeChild)) return false;
+      if (args.direction === 'above') return state.previous <= args.threshold && state.current > args.threshold;
+      return state.previous >= args.threshold && state.current < args.threshold;
+    });
+
+    this._triggerCo2Crossed = this.homey.flow.getTriggerCard('zone-co2-crossed');
+    this._triggerCo2Crossed.registerArgumentAutocompleteListener('zone', async (query) => {
+      return this.service.getZonesAutocomplete(query);
+    });
+    this._triggerCo2Crossed.registerRunListener(async (args, state) => {
+      if (args.zone.id !== state.zone.id || Boolean(args.includeChild) !== Boolean(state.includeChild)) return false;
+      if (args.direction === 'above') return state.previous <= args.threshold && state.current > args.threshold;
+      return state.previous >= args.threshold && state.current < args.threshold;
+    });
+
     // --- Condition cards ---
     const condTempAbove = this.homey.flow.getConditionCard('zone-temperature-above');
     condTempAbove.registerArgumentAutocompleteListener('zone', async (query) => {
@@ -108,9 +147,14 @@ module.exports = class ZoneClimate extends Homey.App {
 
     // --- Trigger polling ---
     this._previousState = new Map();
+    // Run once after a short delay to capture baseline state
+    this.homey.setTimeout(() => {
+      this._evaluateTriggers().catch(err => this.error('Trigger evaluation failed:', err.message));
+    }, 10000);
+    // Then poll every 60 seconds
     this._pollInterval = this.homey.setInterval(() => {
       this._evaluateTriggers().catch(err => this.error('Trigger evaluation failed:', err.message));
-    }, 120000);
+    }, 60000);
   }
 
   async _evaluateTriggers() {
@@ -123,7 +167,7 @@ module.exports = class ZoneClimate extends Homey.App {
           const stateKey = `${zone.id}:${includeChild}`;
           const prev = this._previousState.get(stateKey) || {};
 
-          // Temperature trigger
+          // Temperature triggers
           if (data.measure_temperature.available) {
             const tempC = this.service.convertToCelsius(data.measure_temperature.average, data.measure_temperature.units);
             if (prev.temperature === undefined || Math.abs(tempC - prev.temperature) > 0.5) {
@@ -132,10 +176,16 @@ module.exports = class ZoneClimate extends Homey.App {
                 zone_name: zone.name,
               }, { zone: { id: zone.id, name: zone.name }, includeChild }).catch(err => this.error(err));
             }
+            if (prev.temperature !== undefined) {
+              this._triggerTempCrossed.trigger({
+                temperature: Math.round(tempC * 10) / 10,
+                zone_name: zone.name,
+              }, { zone: { id: zone.id, name: zone.name }, includeChild, previous: prev.temperature, current: tempC }).catch(err => this.error(err));
+            }
             prev.temperature = tempC;
           }
 
-          // Humidity trigger
+          // Humidity triggers
           if (data.measure_humidity.available) {
             const hum = data.measure_humidity.average;
             if (prev.humidity === undefined || Math.abs(hum - prev.humidity) > 2) {
@@ -143,6 +193,12 @@ module.exports = class ZoneClimate extends Homey.App {
                 humidity: Math.round(hum),
                 zone_name: zone.name,
               }, { zone: { id: zone.id, name: zone.name }, includeChild }).catch(err => this.error(err));
+            }
+            if (prev.humidity !== undefined) {
+              this._triggerHumCrossed.trigger({
+                humidity: Math.round(hum),
+                zone_name: zone.name,
+              }, { zone: { id: zone.id, name: zone.name }, includeChild, previous: prev.humidity, current: hum }).catch(err => this.error(err));
             }
             prev.humidity = hum;
           }
@@ -173,6 +229,24 @@ module.exports = class ZoneClimate extends Homey.App {
               }, { zone: { id: zone.id, name: zone.name }, includeChild }).catch(err => this.error(err));
             }
             prev.airQuality = aqLabel;
+          }
+
+          // CO2 triggers
+          if (data.measure_co2.available) {
+            const co2 = data.measure_co2.average;
+            if (prev.co2 === undefined || Math.abs(co2 - prev.co2) > 25) {
+              this._triggerCo2Changed.trigger({
+                co2: Math.round(co2),
+                zone_name: zone.name,
+              }, { zone: { id: zone.id, name: zone.name }, includeChild }).catch(err => this.error(err));
+            }
+            if (prev.co2 !== undefined) {
+              this._triggerCo2Crossed.trigger({
+                co2: Math.round(co2),
+                zone_name: zone.name,
+              }, { zone: { id: zone.id, name: zone.name }, includeChild, previous: prev.co2, current: co2 }).catch(err => this.error(err));
+            }
+            prev.co2 = co2;
           }
 
           this._previousState.set(stateKey, prev);

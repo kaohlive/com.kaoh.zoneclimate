@@ -1,0 +1,49 @@
+{
+  "id": "zone-co2-changed",
+  "title": {
+    "en": "Zone average CO2 changed"
+  },
+  "titleFormatted": {
+    "en": "The average CO2 in [[zone]] changed (nested: [[includeChild]])"
+  },
+  "hint": {
+    "en": "Triggers when the average CO2 level in a zone changes by more than 25 ppm."
+  },
+  "args": [
+    {
+      "type": "autocomplete",
+      "name": "zone",
+      "title": {
+        "en": "Zone"
+      },
+      "placeholder": {
+        "en": "Select a zone..."
+      }
+    },
+    {
+      "type": "checkbox",
+      "name": "includeChild",
+      "title": {
+        "en": "Include nested zones"
+      }
+    }
+  ],
+  "tokens": [
+    {
+      "name": "co2",
+      "type": "number",
+      "title": {
+        "en": "CO2 (ppm)"
+      },
+      "example": 650
+    },
+    {
+      "name": "zone_name",
+      "type": "string",
+      "title": {
+        "en": "Zone name"
+      },
+      "example": "Living room"
+    }
+  ]
+}

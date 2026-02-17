@@ -1,0 +1,73 @@
+{
+  "id": "zone-co2-crossed",
+  "title": {
+    "en": "Zone CO2 crossed threshold"
+  },
+  "titleFormatted": {
+    "en": "[[zone]] CO2 [[direction]] [[threshold]] ppm (nested: [[includeChild]])"
+  },
+  "hint": {
+    "en": "Triggers once when the average CO2 level crosses above or below a threshold."
+  },
+  "args": [
+    {
+      "type": "autocomplete",
+      "name": "zone",
+      "title": {
+        "en": "Zone"
+      },
+      "placeholder": {
+        "en": "Select a zone..."
+      }
+    },
+    {
+      "type": "dropdown",
+      "name": "direction",
+      "title": {
+        "en": "Direction"
+      },
+      "values": [
+        { "id": "above", "title": { "en": "Rises above" } },
+        { "id": "below", "title": { "en": "Drops below" } }
+      ]
+    },
+    {
+      "type": "number",
+      "name": "threshold",
+      "title": {
+        "en": "Threshold (ppm)"
+      },
+      "placeholder": {
+        "en": "800"
+      },
+      "min": 0,
+      "max": 5000,
+      "step": 50
+    },
+    {
+      "type": "checkbox",
+      "name": "includeChild",
+      "title": {
+        "en": "Include nested zones"
+      }
+    }
+  ],
+  "tokens": [
+    {
+      "name": "co2",
+      "type": "number",
+      "title": {
+        "en": "CO2 (ppm)"
+      },
+      "example": 650
+    },
+    {
+      "name": "zone_name",
+      "type": "string",
+      "title": {
+        "en": "Zone name"
+      },
+      "example": "Living room"
+    }
+  ]
+}

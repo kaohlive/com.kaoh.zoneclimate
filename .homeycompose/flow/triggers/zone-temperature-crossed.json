@@ -1,0 +1,73 @@
+{
+  "id": "zone-temperature-crossed",
+  "title": {
+    "en": "Zone temperature crossed threshold"
+  },
+  "titleFormatted": {
+    "en": "[[zone]] temperature [[direction]] [[threshold]] degrees (nested: [[includeChild]])"
+  },
+  "hint": {
+    "en": "Triggers once when the average temperature crosses above or below a threshold."
+  },
+  "args": [
+    {
+      "type": "autocomplete",
+      "name": "zone",
+      "title": {
+        "en": "Zone"
+      },
+      "placeholder": {
+        "en": "Select a zone..."
+      }
+    },
+    {
+      "type": "dropdown",
+      "name": "direction",
+      "title": {
+        "en": "Direction"
+      },
+      "values": [
+        { "id": "above", "title": { "en": "Rises above" } },
+        { "id": "below", "title": { "en": "Drops below" } }
+      ]
+    },
+    {
+      "type": "number",
+      "name": "threshold",
+      "title": {
+        "en": "Threshold (°C)"
+      },
+      "placeholder": {
+        "en": "21"
+      },
+      "min": -40,
+      "max": 80,
+      "step": 0.5
+    },
+    {
+      "type": "checkbox",
+      "name": "includeChild",
+      "title": {
+        "en": "Include nested zones"
+      }
+    }
+  ],
+  "tokens": [
+    {
+      "name": "temperature",
+      "type": "number",
+      "title": {
+        "en": "Temperature"
+      },
+      "example": 21.5
+    },
+    {
+      "name": "zone_name",
+      "type": "string",
+      "title": {
+        "en": "Zone name"
+      },
+      "example": "Living room"
+    }
+  ]
+}
