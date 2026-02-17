@@ -1,0 +1,49 @@
+{
+  "id": "zone-humidity-changed",
+  "title": {
+    "en": "Zone average humidity changed"
+  },
+  "titleFormatted": {
+    "en": "The average humidity in [[zone]] changed (nested: [[includeChild]])"
+  },
+  "hint": {
+    "en": "Triggers when the average humidity in a zone changes by more than 2%."
+  },
+  "args": [
+    {
+      "type": "autocomplete",
+      "name": "zone",
+      "title": {
+        "en": "Zone"
+      },
+      "placeholder": {
+        "en": "Select a zone..."
+      }
+    },
+    {
+      "type": "checkbox",
+      "name": "includeChild",
+      "title": {
+        "en": "Include nested zones"
+      }
+    }
+  ],
+  "tokens": [
+    {
+      "name": "humidity",
+      "type": "number",
+      "title": {
+        "en": "Humidity"
+      },
+      "example": 55
+    },
+    {
+      "name": "zone_name",
+      "type": "string",
+      "title": {
+        "en": "Zone name"
+      },
+      "example": "Living room"
+    }
+  ]
+}

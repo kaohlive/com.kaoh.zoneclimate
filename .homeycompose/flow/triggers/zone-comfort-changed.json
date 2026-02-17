@@ -1,0 +1,65 @@
+{
+  "id": "zone-comfort-changed",
+  "title": {
+    "en": "Zone comfort level changed"
+  },
+  "titleFormatted": {
+    "en": "The comfort level in [[zone]] changed (nested: [[includeChild]])"
+  },
+  "hint": {
+    "en": "Triggers when the thermal comfort classification changes (e.g., from 'comfortable' to 'warm')."
+  },
+  "args": [
+    {
+      "type": "autocomplete",
+      "name": "zone",
+      "title": {
+        "en": "Zone"
+      },
+      "placeholder": {
+        "en": "Select a zone..."
+      }
+    },
+    {
+      "type": "checkbox",
+      "name": "includeChild",
+      "title": {
+        "en": "Include nested zones"
+      }
+    }
+  ],
+  "tokens": [
+    {
+      "name": "comfort",
+      "type": "string",
+      "title": {
+        "en": "Comfort level"
+      },
+      "example": "warm humid"
+    },
+    {
+      "name": "temperature",
+      "type": "number",
+      "title": {
+        "en": "Temperature"
+      },
+      "example": 21.5
+    },
+    {
+      "name": "humidity",
+      "type": "number",
+      "title": {
+        "en": "Humidity"
+      },
+      "example": 55
+    },
+    {
+      "name": "zone_name",
+      "type": "string",
+      "title": {
+        "en": "Zone name"
+      },
+      "example": "Living room"
+    }
+  ]
+}

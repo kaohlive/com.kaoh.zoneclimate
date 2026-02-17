@@ -1,0 +1,44 @@
+{
+  "id": "zone-humidity-above",
+  "title": {
+    "en": "Zone humidity is !{{above|below}} threshold"
+  },
+  "titleFormatted": {
+    "en": "[[zone]] humidity is !{{above|below}} [[threshold]]% (nested: [[includeChild]])"
+  },
+  "hint": {
+    "en": "Checks if the average humidity in a zone is above or below a threshold."
+  },
+  "args": [
+    {
+      "type": "autocomplete",
+      "name": "zone",
+      "title": {
+        "en": "Zone"
+      },
+      "placeholder": {
+        "en": "Select a zone..."
+      }
+    },
+    {
+      "type": "number",
+      "name": "threshold",
+      "title": {
+        "en": "Threshold (%)"
+      },
+      "placeholder": {
+        "en": "60"
+      },
+      "min": 0,
+      "max": 100,
+      "step": 1
+    },
+    {
+      "type": "checkbox",
+      "name": "includeChild",
+      "title": {
+        "en": "Include nested zones"
+      }
+    }
+  ]
+}

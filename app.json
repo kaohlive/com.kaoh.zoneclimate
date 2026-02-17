@@ -31,6 +31,440 @@
     "name": "Vincent Boer",
     "email": "vincent@vdboer.nl"
   },
+  "flow": {
+    "triggers": [
+      {
+        "id": "zone-air-quality-changed",
+        "title": {
+          "en": "Zone air quality changed"
+        },
+        "titleFormatted": {
+          "en": "The air quality in [[zone]] changed (nested: [[includeChild]])"
+        },
+        "hint": {
+          "en": "Triggers when the IAQ classification changes (e.g., from 'good' to 'fair')."
+        },
+        "args": [
+          {
+            "type": "autocomplete",
+            "name": "zone",
+            "title": {
+              "en": "Zone"
+            },
+            "placeholder": {
+              "en": "Select a zone..."
+            }
+          },
+          {
+            "type": "checkbox",
+            "name": "includeChild",
+            "title": {
+              "en": "Include nested zones"
+            }
+          }
+        ],
+        "tokens": [
+          {
+            "name": "air_quality",
+            "type": "string",
+            "title": {
+              "en": "Air quality"
+            },
+            "example": "good"
+          },
+          {
+            "name": "iaq_value",
+            "type": "number",
+            "title": {
+              "en": "IAQ value"
+            },
+            "example": 75
+          },
+          {
+            "name": "zone_name",
+            "type": "string",
+            "title": {
+              "en": "Zone name"
+            },
+            "example": "Living room"
+          }
+        ]
+      },
+      {
+        "id": "zone-comfort-changed",
+        "title": {
+          "en": "Zone comfort level changed"
+        },
+        "titleFormatted": {
+          "en": "The comfort level in [[zone]] changed (nested: [[includeChild]])"
+        },
+        "hint": {
+          "en": "Triggers when the thermal comfort classification changes (e.g., from 'comfortable' to 'warm')."
+        },
+        "args": [
+          {
+            "type": "autocomplete",
+            "name": "zone",
+            "title": {
+              "en": "Zone"
+            },
+            "placeholder": {
+              "en": "Select a zone..."
+            }
+          },
+          {
+            "type": "checkbox",
+            "name": "includeChild",
+            "title": {
+              "en": "Include nested zones"
+            }
+          }
+        ],
+        "tokens": [
+          {
+            "name": "comfort",
+            "type": "string",
+            "title": {
+              "en": "Comfort level"
+            },
+            "example": "warm humid"
+          },
+          {
+            "name": "temperature",
+            "type": "number",
+            "title": {
+              "en": "Temperature"
+            },
+            "example": 21.5
+          },
+          {
+            "name": "humidity",
+            "type": "number",
+            "title": {
+              "en": "Humidity"
+            },
+            "example": 55
+          },
+          {
+            "name": "zone_name",
+            "type": "string",
+            "title": {
+              "en": "Zone name"
+            },
+            "example": "Living room"
+          }
+        ]
+      },
+      {
+        "id": "zone-humidity-changed",
+        "title": {
+          "en": "Zone average humidity changed"
+        },
+        "titleFormatted": {
+          "en": "The average humidity in [[zone]] changed (nested: [[includeChild]])"
+        },
+        "hint": {
+          "en": "Triggers when the average humidity in a zone changes by more than 2%."
+        },
+        "args": [
+          {
+            "type": "autocomplete",
+            "name": "zone",
+            "title": {
+              "en": "Zone"
+            },
+            "placeholder": {
+              "en": "Select a zone..."
+            }
+          },
+          {
+            "type": "checkbox",
+            "name": "includeChild",
+            "title": {
+              "en": "Include nested zones"
+            }
+          }
+        ],
+        "tokens": [
+          {
+            "name": "humidity",
+            "type": "number",
+            "title": {
+              "en": "Humidity"
+            },
+            "example": 55
+          },
+          {
+            "name": "zone_name",
+            "type": "string",
+            "title": {
+              "en": "Zone name"
+            },
+            "example": "Living room"
+          }
+        ]
+      },
+      {
+        "id": "zone-temperature-changed",
+        "title": {
+          "en": "Zone average temperature changed"
+        },
+        "titleFormatted": {
+          "en": "The average temperature in [[zone]] changed (nested: [[includeChild]])"
+        },
+        "hint": {
+          "en": "Triggers when the average temperature in a zone changes by more than 0.5 degrees."
+        },
+        "args": [
+          {
+            "type": "autocomplete",
+            "name": "zone",
+            "title": {
+              "en": "Zone"
+            },
+            "placeholder": {
+              "en": "Select a zone..."
+            }
+          },
+          {
+            "type": "checkbox",
+            "name": "includeChild",
+            "title": {
+              "en": "Include nested zones"
+            }
+          }
+        ],
+        "tokens": [
+          {
+            "name": "temperature",
+            "type": "number",
+            "title": {
+              "en": "Temperature"
+            },
+            "example": 21.5
+          },
+          {
+            "name": "zone_name",
+            "type": "string",
+            "title": {
+              "en": "Zone name"
+            },
+            "example": "Living room"
+          }
+        ]
+      }
+    ],
+    "conditions": [
+      {
+        "id": "zone-co2-above",
+        "title": {
+          "en": "Zone CO2 is !{{above|below}} threshold"
+        },
+        "titleFormatted": {
+          "en": "[[zone]] CO2 is !{{above|below}} [[threshold]] ppm (nested: [[includeChild]])"
+        },
+        "hint": {
+          "en": "Checks if the average CO2 level in a zone is above or below a threshold."
+        },
+        "args": [
+          {
+            "type": "autocomplete",
+            "name": "zone",
+            "title": {
+              "en": "Zone"
+            },
+            "placeholder": {
+              "en": "Select a zone..."
+            }
+          },
+          {
+            "type": "number",
+            "name": "threshold",
+            "title": {
+              "en": "Threshold (ppm)"
+            },
+            "placeholder": {
+              "en": "800"
+            },
+            "min": 0,
+            "max": 5000,
+            "step": 50
+          },
+          {
+            "type": "checkbox",
+            "name": "includeChild",
+            "title": {
+              "en": "Include nested zones"
+            }
+          }
+        ]
+      },
+      {
+        "id": "zone-comfort-is",
+        "title": {
+          "en": "Zone comfort is !{{|not}} ..."
+        },
+        "titleFormatted": {
+          "en": "[[zone]] comfort is !{{|not}} [[comfort]] (nested: [[includeChild]])"
+        },
+        "hint": {
+          "en": "Checks if the comfort classification of a zone matches the selected level."
+        },
+        "args": [
+          {
+            "type": "autocomplete",
+            "name": "zone",
+            "title": {
+              "en": "Zone"
+            },
+            "placeholder": {
+              "en": "Select a zone..."
+            }
+          },
+          {
+            "type": "dropdown",
+            "name": "comfort",
+            "title": {
+              "en": "Comfort level"
+            },
+            "values": [
+              {
+                "id": "very cold",
+                "title": {
+                  "en": "Very cold"
+                }
+              },
+              {
+                "id": "cold",
+                "title": {
+                  "en": "Cold"
+                }
+              },
+              {
+                "id": "chilly",
+                "title": {
+                  "en": "Chilly"
+                }
+              },
+              {
+                "id": "comfortable",
+                "title": {
+                  "en": "Comfortable"
+                }
+              },
+              {
+                "id": "warm",
+                "title": {
+                  "en": "Warm"
+                }
+              },
+              {
+                "id": "hot",
+                "title": {
+                  "en": "Hot"
+                }
+              }
+            ]
+          },
+          {
+            "type": "checkbox",
+            "name": "includeChild",
+            "title": {
+              "en": "Include nested zones"
+            }
+          }
+        ]
+      },
+      {
+        "id": "zone-humidity-above",
+        "title": {
+          "en": "Zone humidity is !{{above|below}} threshold"
+        },
+        "titleFormatted": {
+          "en": "[[zone]] humidity is !{{above|below}} [[threshold]]% (nested: [[includeChild]])"
+        },
+        "hint": {
+          "en": "Checks if the average humidity in a zone is above or below a threshold."
+        },
+        "args": [
+          {
+            "type": "autocomplete",
+            "name": "zone",
+            "title": {
+              "en": "Zone"
+            },
+            "placeholder": {
+              "en": "Select a zone..."
+            }
+          },
+          {
+            "type": "number",
+            "name": "threshold",
+            "title": {
+              "en": "Threshold (%)"
+            },
+            "placeholder": {
+              "en": "60"
+            },
+            "min": 0,
+            "max": 100,
+            "step": 1
+          },
+          {
+            "type": "checkbox",
+            "name": "includeChild",
+            "title": {
+              "en": "Include nested zones"
+            }
+          }
+        ]
+      },
+      {
+        "id": "zone-temperature-above",
+        "title": {
+          "en": "Zone temperature is !{{above|below}} threshold"
+        },
+        "titleFormatted": {
+          "en": "[[zone]] temperature is !{{above|below}} [[threshold]] degrees (nested: [[includeChild]])"
+        },
+        "hint": {
+          "en": "Checks if the average temperature in a zone is above or below a threshold (in Celsius)."
+        },
+        "args": [
+          {
+            "type": "autocomplete",
+            "name": "zone",
+            "title": {
+              "en": "Zone"
+            },
+            "placeholder": {
+              "en": "Select a zone..."
+            }
+          },
+          {
+            "type": "number",
+            "name": "threshold",
+            "title": {
+              "en": "Threshold (°C)"
+            },
+            "placeholder": {
+              "en": "21"
+            },
+            "min": -40,
+            "max": 80,
+            "step": 0.5
+          },
+          {
+            "type": "checkbox",
+            "name": "includeChild",
+            "title": {
+              "en": "Include nested zones"
+            }
+          }
+        ]
+      }
+    ]
+  },
   "widgets": {
     "zone-climate": {
       "name": {

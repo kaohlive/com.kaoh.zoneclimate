@@ -1,0 +1,46 @@
+{
+  "id": "zone-comfort-is",
+  "title": {
+    "en": "Zone comfort is !{{|not}} ..."
+  },
+  "titleFormatted": {
+    "en": "[[zone]] comfort is !{{|not}} [[comfort]] (nested: [[includeChild]])"
+  },
+  "hint": {
+    "en": "Checks if the comfort classification of a zone matches the selected level."
+  },
+  "args": [
+    {
+      "type": "autocomplete",
+      "name": "zone",
+      "title": {
+        "en": "Zone"
+      },
+      "placeholder": {
+        "en": "Select a zone..."
+      }
+    },
+    {
+      "type": "dropdown",
+      "name": "comfort",
+      "title": {
+        "en": "Comfort level"
+      },
+      "values": [
+        { "id": "very cold", "title": { "en": "Very cold" } },
+        { "id": "cold", "title": { "en": "Cold" } },
+        { "id": "chilly", "title": { "en": "Chilly" } },
+        { "id": "comfortable", "title": { "en": "Comfortable" } },
+        { "id": "warm", "title": { "en": "Warm" } },
+        { "id": "hot", "title": { "en": "Hot" } }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "name": "includeChild",
+      "title": {
+        "en": "Include nested zones"
+      }
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "id": "zone-temperature-changed",
+  "title": {
+    "en": "Zone average temperature changed"
+  },
+  "titleFormatted": {
+    "en": "The average temperature in [[zone]] changed (nested: [[includeChild]])"
+  },
+  "hint": {
+    "en": "Triggers when the average temperature in a zone changes by more than 0.5 degrees."
+  },
+  "args": [
+    {
+      "type": "autocomplete",
+      "name": "zone",
+      "title": {
+        "en": "Zone"
+      },
+      "placeholder": {
+        "en": "Select a zone..."
+      }
+    },
+    {
+      "type": "checkbox",
+      "name": "includeChild",
+      "title": {
+        "en": "Include nested zones"
+      }
+    }
+  ],
+  "tokens": [
+    {
+      "name": "temperature",
+      "type": "number",
+      "title": {
+        "en": "Temperature"
+      },
+      "example": 21.5
+    },
+    {
+      "name": "zone_name",
+      "type": "string",
+      "title": {
+        "en": "Zone name"
+      },
+      "example": "Living room"
+    }
+  ]
+}

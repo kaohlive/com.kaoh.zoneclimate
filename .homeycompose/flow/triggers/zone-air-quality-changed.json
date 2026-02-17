@@ -1,0 +1,57 @@
+{
+  "id": "zone-air-quality-changed",
+  "title": {
+    "en": "Zone air quality changed"
+  },
+  "titleFormatted": {
+    "en": "The air quality in [[zone]] changed (nested: [[includeChild]])"
+  },
+  "hint": {
+    "en": "Triggers when the IAQ classification changes (e.g., from 'good' to 'fair')."
+  },
+  "args": [
+    {
+      "type": "autocomplete",
+      "name": "zone",
+      "title": {
+        "en": "Zone"
+      },
+      "placeholder": {
+        "en": "Select a zone..."
+      }
+    },
+    {
+      "type": "checkbox",
+      "name": "includeChild",
+      "title": {
+        "en": "Include nested zones"
+      }
+    }
+  ],
+  "tokens": [
+    {
+      "name": "air_quality",
+      "type": "string",
+      "title": {
+        "en": "Air quality"
+      },
+      "example": "good"
+    },
+    {
+      "name": "iaq_value",
+      "type": "number",
+      "title": {
+        "en": "IAQ value"
+      },
+      "example": 75
+    },
+    {
+      "name": "zone_name",
+      "type": "string",
+      "title": {
+        "en": "Zone name"
+      },
+      "example": "Living room"
+    }
+  ]
+}

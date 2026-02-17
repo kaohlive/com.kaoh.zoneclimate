@@ -1,0 +1,44 @@
+{
+  "id": "zone-co2-above",
+  "title": {
+    "en": "Zone CO2 is !{{above|below}} threshold"
+  },
+  "titleFormatted": {
+    "en": "[[zone]] CO2 is !{{above|below}} [[threshold]] ppm (nested: [[includeChild]])"
+  },
+  "hint": {
+    "en": "Checks if the average CO2 level in a zone is above or below a threshold."
+  },
+  "args": [
+    {
+      "type": "autocomplete",
+      "name": "zone",
+      "title": {
+        "en": "Zone"
+      },
+      "placeholder": {
+        "en": "Select a zone..."
+      }
+    },
+    {
+      "type": "number",
+      "name": "threshold",
+      "title": {
+        "en": "Threshold (ppm)"
+      },
+      "placeholder": {
+        "en": "800"
+      },
+      "min": 0,
+      "max": 5000,
+      "step": 50
+    },
+    {
+      "type": "checkbox",
+      "name": "includeChild",
+      "title": {
+        "en": "Include nested zones"
+      }
+    }
+  ]
+}

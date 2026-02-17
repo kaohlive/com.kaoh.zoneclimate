@@ -1,0 +1,44 @@
+{
+  "id": "zone-temperature-above",
+  "title": {
+    "en": "Zone temperature is !{{above|below}} threshold"
+  },
+  "titleFormatted": {
+    "en": "[[zone]] temperature is !{{above|below}} [[threshold]] degrees (nested: [[includeChild]])"
+  },
+  "hint": {
+    "en": "Checks if the average temperature in a zone is above or below a threshold (in Celsius)."
+  },
+  "args": [
+    {
+      "type": "autocomplete",
+      "name": "zone",
+      "title": {
+        "en": "Zone"
+      },
+      "placeholder": {
+        "en": "Select a zone..."
+      }
+    },
+    {
+      "type": "number",
+      "name": "threshold",
+      "title": {
+        "en": "Threshold (°C)"
+      },
+      "placeholder": {
+        "en": "21"
+      },
+      "min": -40,
+      "max": 80,
+      "step": 0.5
+    },
+    {
+      "type": "checkbox",
+      "name": "includeChild",
+      "title": {
+        "en": "Include nested zones"
+      }
+    }
+  ]
+}
