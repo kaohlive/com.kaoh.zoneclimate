@@ -22,5 +22,8 @@
   },
   "1.4.0": {
     "en": "Added flowcarts"
+  },
+  "1.4.1": {
+    "en": "Improved memory use and fixed triggers"
   }
 }
