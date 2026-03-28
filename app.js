@@ -170,37 +170,39 @@ module.exports = class ZoneClimate extends Homey.App {
           // Temperature triggers
           if (data.measure_temperature.available) {
             const tempC = this.service.convertToCelsius(data.measure_temperature.average, data.measure_temperature.units);
-            if (prev.temperature === undefined || Math.abs(tempC - prev.temperature) > 0.5) {
+            if (prev.temperature === undefined || Math.abs(tempC - prev.temperature) > 0.3) {
               this._triggerTempChanged.trigger({
-                temperature: Math.round(data.measure_temperature.average * 10) / 10,
+                temperature: Math.round(tempC * 10) / 10,
                 zone_name: zone.name,
               }, { zone: { id: zone.id, name: zone.name }, includeChild }).catch(err => this.error(err));
+              prev.temperature = tempC;
             }
-            if (prev.temperature !== undefined) {
+            if (prev.temperaturePoll !== undefined) {
               this._triggerTempCrossed.trigger({
                 temperature: Math.round(tempC * 10) / 10,
                 zone_name: zone.name,
-              }, { zone: { id: zone.id, name: zone.name }, includeChild, previous: prev.temperature, current: tempC }).catch(err => this.error(err));
+              }, { zone: { id: zone.id, name: zone.name }, includeChild, previous: prev.temperaturePoll, current: tempC }).catch(err => this.error(err));
             }
-            prev.temperature = tempC;
+            prev.temperaturePoll = tempC;
           }
 
           // Humidity triggers
           if (data.measure_humidity.available) {
             const hum = data.measure_humidity.average;
-            if (prev.humidity === undefined || Math.abs(hum - prev.humidity) > 2) {
+            if (prev.humidity === undefined || Math.abs(hum - prev.humidity) > 1.5) {
               this._triggerHumChanged.trigger({
                 humidity: Math.round(hum),
                 zone_name: zone.name,
               }, { zone: { id: zone.id, name: zone.name }, includeChild }).catch(err => this.error(err));
+              prev.humidity = hum;
             }
-            if (prev.humidity !== undefined) {
+            if (prev.humidityPoll !== undefined) {
               this._triggerHumCrossed.trigger({
                 humidity: Math.round(hum),
                 zone_name: zone.name,
-              }, { zone: { id: zone.id, name: zone.name }, includeChild, previous: prev.humidity, current: hum }).catch(err => this.error(err));
+              }, { zone: { id: zone.id, name: zone.name }, includeChild, previous: prev.humidityPoll, current: hum }).catch(err => this.error(err));
             }
-            prev.humidity = hum;
+            prev.humidityPoll = hum;
           }
 
           // Comfort trigger
@@ -239,14 +241,15 @@ module.exports = class ZoneClimate extends Homey.App {
                 co2: Math.round(co2),
                 zone_name: zone.name,
               }, { zone: { id: zone.id, name: zone.name }, includeChild }).catch(err => this.error(err));
+              prev.co2 = co2;
             }
-            if (prev.co2 !== undefined) {
+            if (prev.co2Poll !== undefined) {
               this._triggerCo2Crossed.trigger({
                 co2: Math.round(co2),
                 zone_name: zone.name,
-              }, { zone: { id: zone.id, name: zone.name }, includeChild, previous: prev.co2, current: co2 }).catch(err => this.error(err));
+              }, { zone: { id: zone.id, name: zone.name }, includeChild, previous: prev.co2Poll, current: co2 }).catch(err => this.error(err));
             }
-            prev.co2 = co2;
+            prev.co2Poll = co2;
           }
 
           this._previousState.set(stateKey, prev);
