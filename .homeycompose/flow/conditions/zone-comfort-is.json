@@ -7,7 +7,7 @@
     "en": "[[zone]] comfort is !{{|not}} [[comfort]] (nested: [[includeChild]])"
   },
   "hint": {
-    "en": "Checks if the comfort classification of a zone matches the selected level."
+    "en": "Checks if the temperature comfort classification of a zone matches the selected level. Combine with the humidity comfort condition to test any climate combination."
   },
   "args": [
     {

@@ -31,5 +31,8 @@
   },
   "1.4.3": {
     "en": "Improved flow triggers and thresholds"
+  },
+  "1.4.4": {
+    "en": "Fixed comfort condition failing when humidity was out of range; added separate humidity comfort condition card"
   }
 }

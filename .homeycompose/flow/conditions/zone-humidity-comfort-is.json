@@ -1,0 +1,44 @@
+{
+  "id": "zone-humidity-comfort-is",
+  "title": {
+    "en": "Zone humidity comfort is !{{|not}} ..."
+  },
+  "titleFormatted": {
+    "en": "[[zone]] humidity comfort is !{{|not}} [[comfort]] (nested: [[includeChild]])"
+  },
+  "hint": {
+    "en": "Checks if the humidity comfort classification of a zone matches the selected level. Combine with the temperature comfort condition to test any climate combination."
+  },
+  "args": [
+    {
+      "type": "autocomplete",
+      "name": "zone",
+      "title": {
+        "en": "Zone"
+      },
+      "placeholder": {
+        "en": "Select a zone..."
+      }
+    },
+    {
+      "type": "dropdown",
+      "name": "comfort",
+      "title": {
+        "en": "Humidity level"
+      },
+      "values": [
+        { "id": "dry", "title": { "en": "Dry" } },
+        { "id": "comfortable", "title": { "en": "Comfortable" } },
+        { "id": "humid", "title": { "en": "Humid" } },
+        { "id": "wet", "title": { "en": "Wet" } }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "name": "includeChild",
+      "title": {
+        "en": "Include nested zones"
+      }
+    }
+  ]
+}

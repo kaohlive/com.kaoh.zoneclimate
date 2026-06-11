@@ -138,11 +138,20 @@ module.exports = class ZoneClimate extends Homey.App {
       return this.service.getZonesAutocomplete(query);
     });
     condComfortIs.registerRunListener(async (args) => {
-      const data = await this.service.getZoneClimate(args.zone.id, args.includeChild, ['measure_temperature', 'measure_humidity']);
-      if (!data.measure_temperature.available || !data.measure_humidity.available) return false;
+      const data = await this.service.getZoneClimate(args.zone.id, args.includeChild, ['measure_temperature']);
+      if (!data.measure_temperature.available) return false;
       const tempC = this.service.convertToCelsius(data.measure_temperature.average, data.measure_temperature.units);
-      const comfort = this.service.classifyComfort(tempC, data.measure_humidity.average);
-      return comfort === args.comfort;
+      return this.service.classifyTemperatureComfort(tempC) === args.comfort;
+    });
+
+    const condHumidityComfortIs = this.homey.flow.getConditionCard('zone-humidity-comfort-is');
+    condHumidityComfortIs.registerArgumentAutocompleteListener('zone', async (query) => {
+      return this.service.getZonesAutocomplete(query);
+    });
+    condHumidityComfortIs.registerRunListener(async (args) => {
+      const data = await this.service.getZoneClimate(args.zone.id, args.includeChild, ['measure_humidity']);
+      if (!data.measure_humidity.available) return false;
+      return this.service.classifyHumidityComfort(data.measure_humidity.average) === args.comfort;
     });
 
     // --- Trigger polling ---
