@@ -34,5 +34,8 @@
   },
   "1.4.4": {
     "en": "Fixed comfort condition failing when humidity was out of range; added separate humidity comfort condition card"
+  },
+  "1.4.5": {
+    "en": "Major memory reduction: switched from repeated full API snapshots to live capability subscriptions with a lightweight in-memory cache"
   }
 }
