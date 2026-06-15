@@ -9,6 +9,11 @@ module.exports = class ZoneClimate extends Homey.App {
     this.log('Zone climate app has been initialized');
 
     this.service = new ZoneClimateService(this.homey);
+    try {
+      await this.service.init();
+    } catch (err) {
+      this.error('Failed to initialize climate service:', err.message);
+    }
 
     this._registerWidgetAutocomplete('zone-climate', ['zone']);
     this._registerWidgetAutocomplete('zone-climate-compact', ['zone', 'zone2']);
@@ -266,6 +271,16 @@ module.exports = class ZoneClimate extends Homey.App {
           this.error(`Trigger eval failed for zone ${zone.name}: ${err.message}`);
         }
       }
+    }
+  }
+
+  async onUninit() {
+    if (this._pollInterval) {
+      this.homey.clearInterval(this._pollInterval);
+      this._pollInterval = null;
+    }
+    if (this.service) {
+      this.service.teardown();
     }
   }
 

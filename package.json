@@ -7,6 +7,6 @@
     "@types/homey": "npm:homey-apps-sdk-v3-types@^0.3.10"
   },
   "dependencies": {
-    "athom-api": "^3.9.2"
+    "homey-api": "^3.14.1"
   }
 }
