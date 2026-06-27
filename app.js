@@ -2,17 +2,19 @@
 
 const Homey = require('homey');
 const { ZoneClimateService, ALL_CAPABILITIES } = require('./lib/zone-climate-service');
+const { Logger } = require('./lib/logger');
 
 module.exports = class ZoneClimate extends Homey.App {
 
   async onInit() {
-    this.log('Zone climate app has been initialized');
+    this.logger = new Logger(this.homey, 'ZoneClimate');
+    this.logger.info('Zone climate app starting', { type: 'lifecycle' });
 
-    this.service = new ZoneClimateService(this.homey);
+    this.service = new ZoneClimateService(this.homey, this.logger);
     try {
       await this.service.init();
     } catch (err) {
-      this.error('Failed to initialize climate service:', err.message);
+      this.logger.error(`Failed to initialize climate service: ${err.message}`, { type: 'lifecycle' });
     }
 
     this._registerWidgetAutocomplete('zone-climate', ['zone']);
@@ -224,6 +226,7 @@ module.exports = class ZoneClimate extends Homey.App {
             const tempC = this.service.convertToCelsius(data.measure_temperature.average, data.measure_temperature.units);
             const comfort = this.service.classifyComfort(tempC, data.measure_humidity.average);
             if (prev.comfort !== undefined && prev.comfort !== comfort) {
+              this.logger.info(`Comfort in ${zone.name}: ${prev.comfort} → ${comfort}`, { type: 'comfort', zone: zone.name, includeChild, from: prev.comfort, to: comfort });
               this._triggerComfortChanged.trigger({
                 comfort,
                 temperature: Math.round(data.measure_temperature.average * 10) / 10,
@@ -238,6 +241,7 @@ module.exports = class ZoneClimate extends Homey.App {
           if (data.measure_iaq.available) {
             const aqLabel = this.service.classifyAirQuality(data.measure_iaq.average);
             if (prev.airQuality !== undefined && prev.airQuality !== aqLabel) {
+              this.logger.info(`Air quality in ${zone.name}: ${prev.airQuality} → ${aqLabel}`, { type: 'air-quality', zone: zone.name, includeChild, from: prev.airQuality, to: aqLabel });
               this._triggerAirQualChanged.trigger({
                 air_quality: aqLabel,
                 iaq_value: Math.round(data.measure_iaq.average),

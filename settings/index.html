@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Zone Climate</title>
+  <script type="text/javascript" src="/homey.js" data-origin="settings"></script>
+  <style>
+    :root {
+      --bg: #f5f5f5;
+      --fg: #1a1a1a;
+      --muted: #6b6b6b;
+      --border: #e0e0e0;
+      --brand: #9C5E32;
+      --row-hover: #ececec;
+      --debug: #1565C0;
+      --info:  #2E7D32;
+      --warn:  #B26A00;
+      --error: #C62828;
+    }
+    * { box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0; padding: 0; background: var(--bg); color: var(--fg); font-size: 14px; }
+    header { padding: 14px 16px; }
+    header h1 { margin: 0; font-size: 16px; font-weight: 600; }
+    header .meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    .tabs { display: flex; gap: 4px; padding: 0 12px; border-bottom: 1px solid var(--border); }
+    .tab { appearance: none; border: none; background: transparent; padding: 10px 14px;
+      font-size: 14px; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; }
+    .tab.active { color: var(--brand); border-bottom-color: var(--brand); font-weight: 600; }
+
+    .panel { display: none; padding: 16px; }
+    .panel.active { display: block; }
+
+    .group { background: #fff; border: 1px solid var(--border); border-radius: 8px;
+      padding: 12px 14px; margin-bottom: 14px; }
+    .group h2 { margin: 0 0 10px; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+    .field { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; }
+    .field label { flex: 1; }
+    .field .unit { color: var(--muted); width: 28px; text-align: right; margin-left: 6px; }
+    .field input { width: 90px; padding: 6px 8px; border: 1px solid var(--border); border-radius: 6px;
+      text-align: right; font-size: 14px; }
+
+    .actions { display: flex; gap: 8px; align-items: center; }
+    button.btn { appearance: none; border: 1px solid var(--border); background: #fff; color: var(--fg);
+      padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 14px; }
+    button.btn.primary { background: var(--brand); border-color: var(--brand); color: #fff; }
+    .hint { color: var(--muted); font-size: 12px; margin: 4px 2px 12px; }
+    .saved { color: var(--info); font-size: 13px; opacity: 0; transition: opacity .2s; }
+    .saved.show { opacity: 1; }
+
+    .log-toolbar { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+    .log-toolbar .grow { flex: 1; }
+    .log-table { width: 100%; border-collapse: collapse; font-size: 12px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .log-table th { text-align: left; color: var(--muted); font-weight: 600; padding: 4px 6px; border-bottom: 1px solid var(--border); }
+    .log-table td { padding: 4px 6px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .log-table tr:hover { background: var(--row-hover); }
+    .lvl { font-weight: 700; }
+    .lvl.DEBUG { color: var(--debug); }
+    .lvl.INFO  { color: var(--info); }
+    .lvl.WARN  { color: var(--warn); }
+    .lvl.ERROR { color: var(--error); }
+    .col-ts { white-space: nowrap; width: 78px; }
+    .col-lvl { width: 52px; }
+    .col-type { width: 84px; color: var(--muted); }
+    .empty { color: var(--muted); padding: 16px 6px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Zone Climate</h1>
+    <div class="meta">Comfort thresholds &amp; activity log</div>
+  </header>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="thresholds">Thresholds</button>
+    <button class="tab" data-tab="log">Log</button>
+  </div>
+
+  <!-- THRESHOLDS -->
+  <div class="panel active" data-panel="thresholds">
+    <p class="hint">The temperature bands the flow cards and widgets use. Each value is the lower bound (in &deg;C) at which that band begins; "Very cold" is anything below the "Cold from" value.</p>
+    <div class="group">
+      <h2>Temperature (&deg;C)</h2>
+      <div class="field"><label>Cold from</label><input type="number" step="0.5" id="tempColdFrom"><span class="unit">&deg;C</span></div>
+      <div class="field"><label>Chilly from</label><input type="number" step="0.5" id="tempChillyFrom"><span class="unit">&deg;C</span></div>
+      <div class="field"><label>Comfortable from</label><input type="number" step="0.5" id="tempComfortableFrom"><span class="unit">&deg;C</span></div>
+      <div class="field"><label>Warm from</label><input type="number" step="0.5" id="tempWarmFrom"><span class="unit">&deg;C</span></div>
+      <div class="field"><label>Hot from</label><input type="number" step="0.5" id="tempHotFrom"><span class="unit">&deg;C</span></div>
+    </div>
+    <p class="hint">Humidity bands. Each value is the lower bound (in %) at which that band begins; "Dry" is anything below the "Comfortable from" value.</p>
+    <div class="group">
+      <h2>Humidity (%)</h2>
+      <div class="field"><label>Comfortable from</label><input type="number" step="1" id="humComfortableFrom"><span class="unit">%</span></div>
+      <div class="field"><label>Humid from</label><input type="number" step="1" id="humHumidFrom"><span class="unit">%</span></div>
+      <div class="field"><label>Wet from</label><input type="number" step="1" id="humWetFrom"><span class="unit">%</span></div>
+    </div>
+    <div class="actions">
+      <button class="btn primary" id="save">Save</button>
+      <button class="btn" id="reset">Reset to defaults</button>
+      <span class="saved" id="saved">Saved</span>
+    </div>
+  </div>
+
+  <!-- LOG -->
+  <div class="panel" data-panel="log">
+    <div class="log-toolbar">
+      <span class="grow hint" style="margin:0">Live activity (kept ~1 hour).</span>
+      <button class="btn" id="clearLog">Clear</button>
+    </div>
+    <table class="log-table">
+      <thead>
+        <tr><th class="col-ts">Time</th><th class="col-lvl">Level</th><th class="col-type">Type</th><th>Message</th></tr>
+      </thead>
+      <tbody id="logBody"></tbody>
+    </table>
+    <div class="empty" id="logEmpty">No log entries yet.</div>
+  </div>
+
+  <script type="text/javascript">
+    var DEFAULTS = {
+      tempColdFrom: 10, tempChillyFrom: 15, tempComfortableFrom: 18.5, tempWarmFrom: 22, tempHotFrom: 28,
+      humComfortableFrom: 30, humHumidFrom: 65, humWetFrom: 80
+    };
+    var TEMP_KEYS = ['tempColdFrom', 'tempChillyFrom', 'tempComfortableFrom', 'tempWarmFrom', 'tempHotFrom'];
+    var HUM_KEYS = ['humComfortableFrom', 'humHumidFrom', 'humWetFrom'];
+    var ALL_KEYS = TEMP_KEYS.concat(HUM_KEYS);
+    var MAX_ROWS = 500;
+
+    function onHomeyReady(Homey) {
+      Homey.ready();
+
+      // Tab switching
+      var tabs = document.querySelectorAll('.tab');
+      for (var i = 0; i < tabs.length; i++) {
+        tabs[i].addEventListener('click', function () { activateTab(this.dataset.tab); });
+      }
+
+      // Thresholds
+      Homey.get('comfortThresholds', function (err, value) {
+        var t = Object.assign({}, DEFAULTS, (err ? null : value) || {});
+        for (var k = 0; k < ALL_KEYS.length; k++) {
+          document.getElementById(ALL_KEYS[k]).value = t[ALL_KEYS[k]];
+        }
+      });
+
+      document.getElementById('save').addEventListener('click', function () { save(Homey); });
+      document.getElementById('reset').addEventListener('click', function () {
+        for (var k = 0; k < ALL_KEYS.length; k++) {
+          document.getElementById(ALL_KEYS[k]).value = DEFAULTS[ALL_KEYS[k]];
+        }
+      });
+
+      // Log
+      Homey.get('debugLog', function (err, value) {
+        renderLog((err ? null : value) || []);
+      });
+      Homey.on('log', function (entry) { if (entry) appendRow(entry); });
+      Homey.on('log:clear', function () { renderLog([]); });
+      document.getElementById('clearLog').addEventListener('click', function () {
+        Homey.set('debugLog', [], function () { renderLog([]); });
+      });
+    }
+
+    function activateTab(name) {
+      var tabs = document.querySelectorAll('.tab');
+      for (var i = 0; i < tabs.length; i++) tabs[i].classList.toggle('active', tabs[i].dataset.tab === name);
+      var panels = document.querySelectorAll('.panel');
+      for (var j = 0; j < panels.length; j++) panels[j].classList.toggle('active', panels[j].dataset.panel === name);
+    }
+
+    function readValues() {
+      var out = {};
+      for (var k = 0; k < ALL_KEYS.length; k++) {
+        out[ALL_KEYS[k]] = parseFloat(document.getElementById(ALL_KEYS[k]).value);
+      }
+      return out;
+    }
+
+    function strictlyIncreasing(values, keys) {
+      for (var i = 0; i < keys.length; i++) {
+        var v = values[keys[i]];
+        if (isNaN(v)) return 'Please fill in all values with numbers.';
+        if (i > 0 && v <= values[keys[i - 1]]) return 'Each band must be higher than the previous one.';
+      }
+      return null;
+    }
+
+    function save(Homey) {
+      var values = readValues();
+      var err = strictlyIncreasing(values, TEMP_KEYS) || strictlyIncreasing(values, HUM_KEYS);
+      for (var h = 0; h < HUM_KEYS.length; h++) {
+        if (values[HUM_KEYS[h]] < 0 || values[HUM_KEYS[h]] > 100) err = err || 'Humidity values must be between 0 and 100.';
+      }
+      if (err) { Homey.alert(err); return; }
+      Homey.set('comfortThresholds', values, function (e) {
+        if (e) { Homey.alert('Could not save: ' + e); return; }
+        var s = document.getElementById('saved');
+        s.classList.add('show');
+        setTimeout(function () { s.classList.remove('show'); }, 1500);
+      });
+    }
+
+    function fmtTime(ts) {
+      var d = new Date(ts);
+      if (isNaN(d.getTime())) return ts;
+      function p(n) { return (n < 10 ? '0' : '') + n; }
+      return p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds());
+    }
+
+    function makeRow(entry) {
+      var tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td class="col-ts">' + fmtTime(entry.ts) + '</td>' +
+        '<td class="col-lvl"><span class="lvl ' + entry.level + '">' + entry.level + '</span></td>' +
+        '<td class="col-type">' + (entry.type ? esc(entry.type) : '') + '</td>' +
+        '<td>' + esc(entry.message) + '</td>';
+      return tr;
+    }
+
+    function esc(s) {
+      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function renderLog(entries) {
+      var body = document.getElementById('logBody');
+      body.innerHTML = '';
+      // newest first
+      var ordered = entries.slice().reverse();
+      for (var i = 0; i < ordered.length; i++) body.appendChild(makeRow(ordered[i]));
+      document.getElementById('logEmpty').style.display = entries.length ? 'none' : 'block';
+    }
+
+    function appendRow(entry) {
+      var body = document.getElementById('logBody');
+      body.insertBefore(makeRow(entry), body.firstChild);
+      document.getElementById('logEmpty').style.display = 'none';
+      while (body.childNodes.length > MAX_ROWS) body.removeChild(body.lastChild);
+    }
+  </script>
+</body>
+</html>

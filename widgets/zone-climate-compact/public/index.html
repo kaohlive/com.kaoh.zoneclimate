@@ -172,18 +172,9 @@
             top=(tempAvarageInCelcius / 20) * 50; }
           document.getElementById('climate-slider-'+zone).style.top=(100-top)+'%';
           document.getElementById('measure-temp-'+zone).innerText=climateStatus.measure_temperature.average.toFixed(1)+climateStatus.measure_temperature.units;
-          if(tempAvarageInCelcius < 10)
-            document.getElementById('climate-comfort-'+zone).innerHTML+='very cold&nbsp;';
-          else if(tempAvarageInCelcius < 15)
-            document.getElementById('climate-comfort-'+zone).innerHTML+='cold&nbsp;';
-          else if(tempAvarageInCelcius < 18.5)
-            document.getElementById('climate-comfort-'+zone).innerHTML+='chilly&nbsp;';
-          else if(tempAvarageInCelcius < 22)
-            document.getElementById('climate-comfort-'+zone).innerHTML+='';
-          else if(tempAvarageInCelcius < 28)
-            document.getElementById('climate-comfort-'+zone).innerHTML+='warm&nbsp;';
-          else
-            document.getElementById('climate-comfort-'+zone).innerHTML+='hot&nbsp;';
+          var tComfort = (climateStatus.classification && climateStatus.classification.temperature) || '';
+          if (tComfort && tComfort !== 'comfortable')
+            document.getElementById('climate-comfort-'+zone).innerHTML+=tComfort+'&nbsp;';
         } else {
           document.getElementById('climate-slider-'+zone).style.top='50%';
           document.getElementById('measure-temp-'+zone).innerText='-';
@@ -195,14 +186,9 @@
             left=(climateStatus.measure_humidity.average / 50) * 50; }
           document.getElementById('climate-slider-'+zone).style.left=(100-left)+'%'
           document.getElementById('measure-hum-'+zone).innerText=climateStatus.measure_humidity.average.toFixed(0)+climateStatus.measure_humidity.units;
-          if(climateStatus.measure_humidity.average < 30)
-            document.getElementById('climate-comfort-'+zone).innerHTML+='dry';
-          else if(climateStatus.measure_humidity.average < 65)
-            document.getElementById('climate-comfort-'+zone).innerHTML+='';
-          else if(climateStatus.measure_humidity.average < 80)
-            document.getElementById('climate-comfort-'+zone).innerHTML+='humid';
-          else
-            document.getElementById('climate-comfort-'+zone).innerHTML+='wet';
+          var hComfort = (climateStatus.classification && climateStatus.classification.humidity) || '';
+          if (hComfort && hComfort !== 'comfortable')
+            document.getElementById('climate-comfort-'+zone).innerHTML+=hComfort;
         } else {
           document.getElementById('climate-slider-'+zone).style.left='50%';
           document.getElementById('measure-hum-'+zone).innerText='-';

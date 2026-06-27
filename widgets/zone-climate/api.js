@@ -8,6 +8,9 @@ const ALL_CAPABILITIES = [
 module.exports = {
   async getZoneClimate({ homey, query }) {
     const { zoneid, includeChild } = query;
-    return homey.app.service.getZoneClimate(zoneid, includeChild, ALL_CAPABILITIES);
+    const service = homey.app.service;
+    const data = await service.getZoneClimate(zoneid, includeChild, ALL_CAPABILITIES);
+    // Server-computed comfort labels so the widget never duplicates thresholds.
+    return { ...data, classification: service.classifyClimate(data) };
   },
 };

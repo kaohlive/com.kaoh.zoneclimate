@@ -37,5 +37,8 @@
   },
   "1.4.5": {
     "en": "Major memory reduction: switched from repeated full API snapshots to live capability subscriptions with a lightweight in-memory cache"
+  },
+  "1.4.6": {
+    "en": "Added an app settings page to configure the comfort temperature/humidity thresholds, plus an activity log tab. Widgets and flows now share these settings."
   }
 }
